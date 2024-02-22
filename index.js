@@ -2,9 +2,9 @@ require('dotenv').config()
 const {Telegraf, Markup} = require('telegraf');
 const mongoose = require("mongoose");
 const posting = require('./utils/scrapping');
-const bot = new Telegraf(process.env.BOT_TOKEN);
+const bot = new Telegraf("6382734800:AAEewotpAHg7vJtzMZ_Q6XEVCIF6WvBLXgo");
 
-const uri = `mongodb+srv://${process.env.MG_USER}:${process.env.MG_PASS}@cluster0.pirjxhw.mongodb.net/freelancer?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://mhoja9494:ftVbU1Gqm7casRq4@cluster0.pirjxhw.mongodb.net/freelancer?retryWrites=true&w=majority`;
 
 mongoose
   .connect(uri, {
