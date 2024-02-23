@@ -52,7 +52,7 @@ categories.forEach(category => {
         keyboard)
     }
     catch (e) {
-      console.error(`error at it.action: ${e.message}`)
+      console.error(`error at category.action: ${e.message}`)
       await ctx.reply('Что-то пошло не так попробуйте перезапустить', Markup.keyboard([
         ['/start']
       ]).resize().oneTime())

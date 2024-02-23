@@ -28,7 +28,7 @@ composer.action('time', async (ctx) => {
     )
   }
   catch (e) {
-    console.error(`error at categories action: ${e.message}`)
+    console.error(`error at time action: ${e.message}`)
     await ctx.reply('Что-то пошло не так попробуйте перезапустить', Markup.keyboard([
       ['/start']
     ]).resize().oneTime())

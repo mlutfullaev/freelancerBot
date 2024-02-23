@@ -89,12 +89,7 @@ const posting = async (bot) => {
             disable_web_page_preview: true,
           })
         } catch (e) {
-          console.error(`error at : ${e.message}`)
-          await bot.telegram.sendMessage(
-            user.id,
-            'Что-то пошло не так попробуйте перезапустить',
-            Markup.keyboard([[Markup.button.callback('/start', '/start')]])
-          )
+          console.error(`error at posting(): ${e.message}`)
         }
       }, 4000 * i)
     }
