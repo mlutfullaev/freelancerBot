@@ -39,7 +39,7 @@ categories.forEach(category => {
 
       const keyboard = Markup.inlineKeyboard(
         [
-          ...category.categories.map((item) => [Markup.button.callback(`${categories.includes(item) ? '✅' : ''} ${item}`, `it_${item}`)]),
+          ...category.categories.map((item) => [Markup.button.callback(`${categories.includes(item) ? '✅' : ''} ${item}`, `${category.name}_${item}`)]),
           [Markup.button.callback('Назад', 'categories')]
         ]
       );

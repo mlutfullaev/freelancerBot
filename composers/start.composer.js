@@ -23,7 +23,7 @@ composer.start(async (ctx) => {
     const name = `${ctx.from.first_name}${ctx.from.last_name ? ` ${ctx.from.last_name}` : ''}`
     if (!user) {
       await UserController.create({name, id: ctx.from.id})
-      const text = `Привет ${ctx.message.from.first_name}, я помогаю фрилансерам с заказами, настройте меня для отправки заказов`
+      const text = `Привет ${ctx.message.from.first_name}, я Mr.Freelance помогаю фрилансерам с заказами, настройте меня для отправки заказов`
       await ctx.reply(text, Markup.inlineKeyboard([
         [Markup.button.callback('Категории', 'categories')],
         [Markup.button.callback('Время', 'time')]
