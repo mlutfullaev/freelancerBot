@@ -18,6 +18,7 @@ const scrapping = async () => {
     await axios.post(`https://kwork.ru/projects?c=all&page=${page}`, {}, headers)
       .then(res => {
         console.log('first project', res.data.data.wants[0].id)
+        ProjectController.updateId(res.data.data.wants[0].id)
         res.data.data.wants.forEach((work, i) => {
           if (gettingOld) return;
           if (work.id <= id) {
@@ -28,8 +29,6 @@ const scrapping = async () => {
             works.push(work);
           }
         })
-        console.log("end id: ", res.data.data.wants[0].id)
-        ProjectController.updateId(res.data.data.wants[0].id)
       })
       .catch(err => {
         console.log(`error while scrapping ${err}`)
