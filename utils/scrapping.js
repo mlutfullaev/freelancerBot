@@ -86,6 +86,7 @@ const posting = async (bot) => {
 
           const text = postingText(filteredProjects[i])
           await bot.telegram.sendMessage(user.id, text, {
+            parse_mode: 'html',
             disable_web_page_preview: true,
           })
         } catch (e) {
@@ -102,3 +103,44 @@ const posting = async (bot) => {
 }
 
 module.exports = posting
+
+function isReadyTest() {
+  const isReadyTests = [
+    {
+      timezone: -12,
+      schedule: '8:00 - 12:00',
+      expected: false
+    },
+    {
+      timezone: -5,
+      schedule: '15:00 - 23:00',
+      expected: true
+    },
+    {
+      timezone: 5,
+      schedule: '08:00 - 23:00',
+      expected: true
+    },
+    {
+      timezone: 0,
+      schedule: '4:00 - 23:00',
+      expected: false
+    },
+    {
+      timezone: 8,
+      schedule: '11:00 - 12:00',
+      expected: true
+    },
+    {
+      timezone: 12,
+      schedule: '19:00 - 23:30',
+      expected: false
+    },
+  ]
+
+  isReadyTests.forEach((test, i) => {
+    console.log(`result: ${isReady(test.schedule, test.timezone)}, expected: ${test.expected}, index: ${i}`)
+  })
+}
+
+// isReadyTest()
