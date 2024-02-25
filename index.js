@@ -21,6 +21,10 @@ mongoose
     console.log(err);
   });
 
+bot.command('help', async (ctx) => {
+  ctx.reply('/start - Чтобы начать или настроить бот.\n/go - Чтобы начать отправку заказов.\n/stop - Чтобы остановить отправку заказов.\n/delete - Чтобы удалить данные о вас.\nЧтобы начать отправку вам надо перейти на настройки и указать категории, часовой пояс и расписание.\n\n@mlutfullaev - по всем другим вопросам.')
+})
+
 bot.use(require('./composers/start.composer'))
 bot.use(require('./composers/posting.composer'))
 bot.use(require('./composers/time.composer'))

@@ -78,7 +78,6 @@ const posting = async (bot) => {
       setTimeout(async () => {
         try {
           if (!filteredProjects[i]) return;
-
           const text = postingText(filteredProjects[i])
           await bot.telegram.sendMessage(user.id, text, {
             parse_mode: 'html',
