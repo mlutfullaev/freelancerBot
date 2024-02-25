@@ -13,27 +13,24 @@ const scrapping = async () => {
   let gettingOld = false;
   let works = [];
 
-  let gettingIndex = 1;
-  for (gettingIndex; gettingIndex < page; gettingIndex++) {
-    await axios.post(`https://kwork.ru/projects?c=all&page=${page}`, {}, headers)
-      .then(res => {
-        console.log('first project', res.data.data.wants[0].id)
-        ProjectController.updateId(res.data.data.wants[0].id)
-        res.data.data.wants.forEach((work, i) => {
-          if (gettingOld) return;
-          if (work.id <= id) {
-            console.log(`stopped at ${work.id}`);
-            gettingIndex = page;
-            gettingOld = true;
-          } else {
-            works.push(work);
-          }
-        })
+  await axios.post(`https://kwork.ru/projects?c=all`, {}, headers)
+    .then(res => {
+      console.log(res.data.data.wants)
+      console.log('first project', res.data.data.wants[0].id)
+      ProjectController.updateId(res.data.data.wants[0].id)
+      res.data.data.wants.forEach((work, i) => {
+        if (gettingOld) return;
+        if (work.id <= id) {
+          console.log(`stopped at ${work.id}`);
+          gettingOld = true;
+        } else {
+          works.push(work);
+        }
       })
-      .catch(err => {
-        console.log(`error while scrapping ${err}`)
-      })
-  }
+    })
+    .catch(err => {
+      console.log(`error while scrapping ${err}`)
+    })
   gettingOld = false;
   return works
 }
