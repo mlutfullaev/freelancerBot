@@ -15,7 +15,6 @@ const scrapping = async () => {
 
   await axios.post(`https://kwork.ru/projects?c=all`, {}, headers)
     .then(res => {
-      console.log(res.data.data.wants)
       console.log('first project', res.data.data.wants[0].id)
       ProjectController.updateId(res.data.data.wants[0].id)
       res.data.data.wants.forEach((work, i) => {
@@ -86,6 +85,9 @@ const posting = async (bot) => {
             disable_web_page_preview: true,
           })
         } catch (e) {
+          if (e.code === 403) {
+            await UserController.updateUser({going: false}, user.id)
+          }
           console.error(`error at posting(): ${e.message}`)
         }
       }, 4000 * i)
