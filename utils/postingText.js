@@ -1,8 +1,4 @@
-const reduceText = (text) => {
-  if (text.length <= 100) return text;
 
-  return text.slice(0, 200) + '...';
-}
 
 const posting = (work) => {
   let text = ''
@@ -10,7 +6,7 @@ const posting = (work) => {
     text += `<b>${work.name.replace('\n', '')}.</b>`
   }
   if (work.description) {
-    text += `\n\nОписание: ${reduceText(work.description)}`
+    text += `\n\nОписание: ${work.description}`
   }
   if (work.priceLimit) {
     text += `\nЦена: ${work.priceLimit.replace('\n', '')}₽`
