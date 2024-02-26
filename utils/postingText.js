@@ -6,22 +6,22 @@ const posting = (work) => {
     text += `<b>${work.name.replace('\n', '')}.</b>`
   }
   if (work.description) {
-    text += `\n\nОписание: ${work.description}`
+    text += `\n\n<b>Описание</b>: ${work.description}`
   }
   if (work.priceLimit) {
-    text += `\nЦена: ${work.priceLimit.replace('\n', '')}₽`
+    text += `\n<b>Цена</b>: ${work.priceLimit.replace('\n', '')}₽`
   }
   if (work.dateCreate) {
-    text += `\nДата выхода: ${work.dateCreate.replace('\n', '')}\n`
+    text += `\n<b>Дата выхода</b>: ${work.dateCreate.replace('\n', '')}\n`
   }
   if (work.categoryName) {
-    text += `\nКатегория: ${work.categoryName.replace('\n', '')}`
+    text += `\n<b>Категория</b>: ${work.categoryName.replace('\n', '')}`
   }
   if (work.id) {
-    text += `\nID: ${work.id}`
+    text += `\n<b>ID</b>: ${work.id}`
   }
   if (work.url) {
-    text += `\n\nСсылка: https://kwork.ru${work.url}`
+    text += `\n\n<b>Ссылка</b>: https://kwork.ru${work.url}`
   }
 
   return text
@@ -80,6 +80,6 @@ function postingTest() {
   console.log(posting(testWork))
 }
 
-// postingTest()
+postingTest()
 
 module.exports = posting
