@@ -14,12 +14,12 @@ const posting = (work) => {
   if (work.dateCreate) {
     text += `\n<b>Дата выхода</b>: ${work.dateCreate.replace('\n', '')}\n`
   }
-  if (work.categoryName) {
-    text += `\n<b>Категория</b>: ${work.categoryName.replace('\n', '')}`
-  }
-  if (work.id) {
-    text += `\n<b>ID</b>: ${work.id}`
-  }
+  // if (work.categoryName) {
+  //   text += `\n<b>Категория</b>: ${work.categoryName.replace('\n', '')}`
+  // }
+  // if (work.id) {
+  //   text += `\n<b>ID</b>: ${work.id}`
+  // }
   if (work.url) {
     text += `\n\n<b>Ссылка</b>: https://kwork.ru${work.url}`
   }
