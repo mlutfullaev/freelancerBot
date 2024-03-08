@@ -12,7 +12,7 @@ const posting = (work) => {
     text += `\n<b>Цена</b>: ${work.priceLimit.replace('\n', '')}₽`
   }
   if (work.dateCreate) {
-    text += `\n<b>Дата выхода</b>: ${work.dateCreate.replace('\n', '')}\n`
+    text += `\n<b>Дата выхода</b>: ${work.dateCreate.replace('\n', '')}`
   }
   // if (work.categoryName) {
   //   text += `\n<b>Категория</b>: ${work.categoryName.replace('\n', '')}`
