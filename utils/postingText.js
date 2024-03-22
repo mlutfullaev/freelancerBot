@@ -80,6 +80,6 @@ function postingTest() {
   console.log(posting(testWork))
 }
 
-postingTest()
+// postingTest()
 
 module.exports = posting

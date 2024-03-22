@@ -1,11 +1,9 @@
 const UserController = require("../controller/user.controller");
 const ProjectController = require("../controller/project.controller");
 const moment = require('moment-timezone');
-const {Markup} = require("telegraf");
 const axios = require("axios");
 const {headers} = require("./data");
 const postingText = require("./postingText");
-let page = 4
 
 const scrapping = async () => {
   const id = Number(await ProjectController.getId())
@@ -62,42 +60,56 @@ function isReady(schedule, timezoneOffset) {
 }
 
 const posting = async (bot) => {
-  let users = await UserController.getReadyUsers()
-  if (!users.length) return
-  users = users.filter(user => isReady(user.schedule, user.timezone))
-  if (!users.length) return
+  try {
+    let users = await UserController.getReadyUsers()
+    if (!users.length) return
+    users = users.filter(user => isReady(user.schedule, user.timezone))
+    if (!users.length) return
 
-  const projects = await scrapping()
-  if (!projects.length) return
+    const projects = await scrapping()
+    if (!projects.length) return
 
-  users.forEach(user => {
-    const filteredProjects = projects.filter(project => user.categories.includes(project.categoryName)).reverse()
-    if (!filteredProjects.length) return
+    users.forEach(user => {
+      const filteredProjects = projects.filter(project => user.categories.includes(project.categoryName)).reverse()
+      if (!filteredProjects.length) return
 
-    for (let i = 0; i < filteredProjects.length; i++) {
-      setTimeout(async () => {
-        try {
-          if (!filteredProjects[i]) return;
-          const text = postingText(filteredProjects[i])
-          await bot.telegram.sendMessage(user.id, text, {
-            parse_mode: 'html',
-            disable_web_page_preview: true,
-          })
-        } catch (e) {
-          if (e.code === 403) {
-            await UserController.updateUser({going: false}, user.id)
+      for (let i = 0; i < filteredProjects.length; i++) {
+        setTimeout(async () => {
+          try {
+            if (!filteredProjects[i]) return;
+            const text = postingText(filteredProjects[i])
+            await bot.telegram.sendMessage(user.id, text, {
+              parse_mode: 'html',
+              disable_web_page_preview: true,
+            })
+          } catch (e) {
+            if (e.code === 403) {
+              await UserController.updateUser({going: false}, user.id)
+            }
+            console.error(`error at posting(): ${e.message}`)
           }
-          console.error(`error at posting(): ${e.message}`)
-        }
-      }, 4000 * i)
-    }
-  })
+        }, 4000 * i)
+      }
+    })
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 module.exports = posting
 
 function isReadyTest() {
   const isReadyTests = [
+    {
+      timezone: 0,
+      schedule: '8:00 - 12:00',
+      expected: true
+    },
+    {
+      timezone: 0,
+      schedule: '11:00 - 23:00',
+      expected: false
+    },
     {
       timezone: -12,
       schedule: '8:00 - 12:00',

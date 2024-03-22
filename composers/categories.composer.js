@@ -18,16 +18,21 @@ composer.action('categories', async (ctx) => {
     })
 
     if (user.categories.length) {
-      buttons.push([Markup.button.callback('Готово', 'done')])
+      buttons.push([Markup.button.callback('Готово', 'done_cat')])
+      return await ctx.telegram.editMessageText(
+        ctx.callbackQuery.message.chat.id,
+        ctx.callbackQuery.message.message_id,
+        null,
+        'Нажмите на кнопку "Готово" когда закончите.',
+        Markup.inlineKeyboard(buttons)
+      )
     }
 
     await ctx.telegram.editMessageText(ctx.callbackQuery.message.chat.id, ctx.callbackQuery.message.message_id, null, 'Какие сферы вас интересуют?', Markup.inlineKeyboard(buttons))
   }
   catch (e) {
-    console.error(`error at categories action: ${e.message}`)
-    await ctx.reply('Что-то пошло не так попробуйте перезапустить', Markup.keyboard([
-      ['/start']
-    ]).resize().oneTime())
+    console.error(`error at categories.action: ${e.message}`)
+    await ctx.reply('Что-то пошло не так попробуйте перезапустить - /start')
   }
 })
 
@@ -48,7 +53,7 @@ categories.forEach(category => {
         ctx.callbackQuery.message.chat.id,
         ctx.callbackQuery.message.message_id,
         null,
-        'Какие категории вас интересует?',
+        'Выберите нужные категории.',
         keyboard)
     }
     catch (e) {
@@ -82,11 +87,11 @@ categories.forEach(category => {
           ctx.callbackQuery.message.chat.id,
           ctx.callbackQuery.message.message_id,
           null,
-          'Выберите нужные категории',
+          'Выберите нужные категории.',
           keyboard)
       }
       catch (e) {
-        console.error(`error at it_num.action: ${e.message}`)
+        console.error(`error at subCategory.action: ${e.message}`)
         await ctx.reply('Что-то пошло не так попробуйте перезапустить', Markup.keyboard([
           ['/start']
         ]).resize().oneTime())
