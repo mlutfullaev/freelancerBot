@@ -1,4 +1,4 @@
-
+const moment = require('moment-timezone');
 
 const posting = (work) => {
   let text = ''
@@ -12,7 +12,9 @@ const posting = (work) => {
     text += `\n<b>Цена</b>: ${work.priceLimit.replace('\n', '')}₽`
   }
   if (work.dateCreate) {
-    text += `\n<b>Дата выхода</b>: ${work.dateCreate.replace('\n', '')}`
+    let date = new Date(work.dateCreate)
+    date = `${date.getHours()}:${date.getMinutes()} - ${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`
+    text += `\n<b>Дата выхода</b>: ${date}`
   }
   // if (work.categoryName) {
   //   text += `\n<b>Категория</b>: ${work.categoryName.replace('\n', '')}`

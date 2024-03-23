@@ -7,6 +7,7 @@ const buttons = (user) => {
     [Markup.button.callback(`Категории ${user.categories.length ? '✅' : ''}`, 'categories')],
     [Markup.button.callback(`Время ${Number.isInteger(user.timezone) && user.schedule ? '✅' : ''}`, 'time')],
     [Markup.button.callback(`Дни недели (${user.weekdays.length}дн.)`, 'weekdays')],
+    [Markup.button.callback(`Помощь`, 'help')],
   ]
   if (Number.isInteger(user.timezone) && user.schedule && user.categories.length) {
     if (!user.going) {
@@ -15,7 +16,7 @@ const buttons = (user) => {
       keyboard.push([Markup.button.callback(`Остановить отправку`, 'stop')])
     }
   }
-  keyboard.push([Markup.button.callback(`Помощь`, 'help')])
+  keyboard.push([Markup.button.callback(`Готово`, 'delete_msg')])
   return keyboard
 }
 composer.start(async (ctx) => {

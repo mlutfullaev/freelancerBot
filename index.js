@@ -22,7 +22,7 @@ mongoose
   });
 
 bot.command('help', async (ctx) => {
-  ctx.reply('/start - Чтобы начать или настроить бот.\n/go - Чтобы начать отправку заказов.\n/stop - Чтобы остановить отправку заказов.\n/delete - Чтобы удалить данные о вас.\n\nЧтобы начать отправку вам надо перейти на настройки и указать категории, часовой пояс, расписание. Затем вы можете получать заказы по команде /go\n\n@mlutfullaev - по всем другим вопросам.')
+  ctx.reply('/start - Чтобы начать или настроить бот.\n/go - Чтобы начать отправку заказов.\n/stop - Чтобы остановить отправку заказов.\n/help - Для вывода этого списка.\n\nЧтобы начать отправку вам надо перейти на настройки и указать категории, часовой пояс, расписание. Затем вы можете получать заказы по команде /go\n\n@mrfreelance_chat - по всем другим вопросам.')
 })
 bot.action('help', async (ctx) => {
   await ctx.telegram.editMessageText(
@@ -31,6 +31,18 @@ bot.action('help', async (ctx) => {
     null,
     '/start - Чтобы начать или настроить бот.\n/go - Чтобы начать отправку заказов.\n/stop - Чтобы остановить отправку заказов.\n/help - Для вывода этого списка.\n\nЧтобы начать отправку вам надо перейти на настройки и указать категории, часовой пояс, расписание. Затем вы можете получать заказы по команде /go\n\n@mrfreelance_chat - по всем другим вопросам.'
   )
+})
+bot.action('delete_msg', async (ctx) => {
+  await ctx.answerCbQuery()
+  const info = ctx.update.callback_query.message
+
+  bot.telegram.deleteMessage(info.chat.id, info.message_id - 1)
+  bot.telegram.deleteMessage(info.chat.id, info.message_id)
+  try {
+
+  } catch (e) {
+    console.error(`error at delete_msg.action: ${e.message}`)
+  }
 })
 
 bot.use(require('./composers/start.composer'))
