@@ -7,20 +7,25 @@ const go = async (ctx) => {
   try {
     const user = await UserController.getOne(+ctx.from.id)
     if (!user) {
-      return await ctx.reply('Пользователь не найден, чтобы начать нажмите на /start')
+      return await ctx.reply('Пользователь не найден, чтобы начать нажмите на /start.')
     }
     if (!user.categories.length) {
-      return await ctx.reply('Вы не добавили хотя бы одну категорию, перейдите на Категории', Markup.inlineKeyboard([
+      return await ctx.reply('Вы не добавили хотя бы одну категорию, перейдите на Категории.', Markup.inlineKeyboard([
+        [Markup.button.callback('Категории', 'categories')]
+      ]))
+    }
+    if (!user.weekdays.length) {
+      return await ctx.reply('Вы не добавили хотя бы один день для отправки, перейдите на /start > Дни недели.', Markup.inlineKeyboard([
         [Markup.button.callback('Категории', 'categories')]
       ]))
     }
     if (!Number.isInteger(user.timezone)) {
-      return await ctx.reply('Вы не установили часовой пояс, перейдите на Часовой пояс', Markup.inlineKeyboard([
+      return await ctx.reply('Вы не установили часовой пояс, перейдите на Часовой пояс.', Markup.inlineKeyboard([
         [Markup.button.callback('Часовой пояс', 'timezone')]
       ]))
     }
     if (!user.schedule) {
-      return await ctx.reply('Вы не установили временной интервал, перейдите на Расписание', Markup.inlineKeyboard([
+      return await ctx.reply('Вы не установили временной интервал, перейдите на Расписание.', Markup.inlineKeyboard([
         [Markup.button.callback('Расписание', 'schedule')]
       ]))
     }
@@ -61,6 +66,14 @@ const stop = async (ctx) => {
 }
 
 composer.command('go', go)
+composer.action('go', async (ctx) => {
+  await ctx.answerCbQuery()
+  await go(ctx)
+})
 composer.command('stop', stop)
+composer.action('stop', async (ctx) => {
+  await ctx.answerCbQuery()
+  await stop(ctx)
+})
 
 module.exports = composer;

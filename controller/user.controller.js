@@ -11,6 +11,13 @@ class UserController {
         console.error(e.message)
     }
   }
+  getAll = async () => {
+    try {
+      return await User.find()
+    } catch (e) {
+      console.error('Ошибка при получении пользователей', err.message);
+    }
+  }
   getReadyUsers = async () => {
     try {
       return await User.find({going: true})
@@ -35,7 +42,7 @@ class UserController {
         },
         {new: true}
       )
-      if (!user.categories.length) {
+      if (!user.categories.length || !user.weekdays.length) {
         return await User.findOneAndUpdate(
           { id: id },
           {

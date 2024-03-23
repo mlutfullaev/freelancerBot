@@ -2,6 +2,22 @@ const {Composer, Markup} = require('telegraf')
 const UserController = require('../controller/user.controller')
 const composer = new Composer()
 
+const buttons = (user) => {
+  const keyboard = [
+    [Markup.button.callback(`Категории ${user.categories.length ? '✅' : ''}`, 'categories')],
+    [Markup.button.callback(`Время ${Number.isInteger(user.timezone) && user.schedule ? '✅' : ''}`, 'time')],
+    [Markup.button.callback(`Дни недели (${user.weekdays.length}дн.)`, 'weekdays')],
+  ]
+  if (Number.isInteger(user.timezone) && user.schedule && user.categories.length) {
+    if (!user.going) {
+      keyboard.push([Markup.button.callback(`Начать отправку`, 'go')])
+    } else {
+      keyboard.push([Markup.button.callback(`Остановить отправку`, 'stop')])
+    }
+  }
+  keyboard.push([Markup.button.callback(`Помощь`, 'help')])
+  return keyboard
+}
 composer.start(async (ctx) => {
   try {
     const name = `${ctx.from.first_name}${ctx.from.last_name ? ` ${ctx.from.last_name}` : ''}`
@@ -26,18 +42,15 @@ composer.start(async (ctx) => {
       )
     }
 
-    await ctx.reply(`Настройки:`, Markup.inlineKeyboard([
-      [Markup.button.callback(`Категории ${user.categories.length ? '✅' : ''}`, 'categories')],
-      [Markup.button.callback(`Время ${Number.isInteger(user.timezone) && user.schedule ? '✅' : ''}`, 'time')]
-    ]))
+    await ctx.reply(`Настройки:`, Markup.inlineKeyboard(buttons(user)))
   }
   catch (e) {
-    console.error(`error at start.command: ${e.message}`)
+    console.error(`error at start.command: ${e}`)
     await ctx.reply('Что-то пошло не так попробуйте перезапустить - /start')
   }
 });
 
-composer.action('done_cat', async (ctx) => {
+composer.action('done', async (ctx) => {
   try {
     const user = await UserController.getOne(+ctx.from.id)
     if (!user) {
@@ -59,26 +72,11 @@ composer.action('done_cat', async (ctx) => {
       ctx.callbackQuery.message.chat.id,
       ctx.callbackQuery.message.message_id,
       null,
-      `Настройки:`, Markup.inlineKeyboard([
-      [Markup.button.callback(`Категории ${user.categories.length ? '✅' : ''}`, 'categories')],
-      [Markup.button.callback(`Время ${Number.isInteger(user.timezone) && user.schedule ? '✅' : ''}`, 'time')]
-    ]))
-  } catch (e) {
-    console.error(`error at done_cat.action: ${e.message}`)
-    await ctx.reply('Что-то пошло не так попробуйте перезапустить - /start')
-  }
-})
-
-composer.action('done_time', async (ctx) => {
-  try {
-    await ctx.telegram.editMessageText(
-      ctx.callbackQuery.message.chat.id,
-      ctx.callbackQuery.message.message_id,
-      null,
-      `Вы настроили бота!\nДля получение заказов нажмите на /go.\nДля остановки нажмите на /stop.\nДля настройки нажмите на /start.\nПодробнее: /help.`,
+      `Настройки:`,
+      Markup.inlineKeyboard(buttons(user))
     )
   } catch (e) {
-    console.error(`error at done_time.action: ${e.message}`)
+    console.error(`error at done.action: ${e.message}`)
     await ctx.reply('Что-то пошло не так попробуйте перезапустить - /start')
   }
 })

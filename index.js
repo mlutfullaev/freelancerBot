@@ -24,12 +24,19 @@ mongoose
 bot.command('help', async (ctx) => {
   ctx.reply('/start - Чтобы начать или настроить бот.\n/go - Чтобы начать отправку заказов.\n/stop - Чтобы остановить отправку заказов.\n/delete - Чтобы удалить данные о вас.\n\nЧтобы начать отправку вам надо перейти на настройки и указать категории, часовой пояс, расписание. Затем вы можете получать заказы по команде /go\n\n@mlutfullaev - по всем другим вопросам.')
 })
+bot.action('help', async (ctx) => {
+  await ctx.telegram.editMessageText(
+    ctx.callbackQuery.message.chat.id,
+    ctx.callbackQuery.message.message_id,
+    null,
+    '/start - Чтобы начать или настроить бот.\n/go - Чтобы начать отправку заказов.\n/stop - Чтобы остановить отправку заказов.\n/help - Для вывода этого списка.\n\nЧтобы начать отправку вам надо перейти на настройки и указать категории, часовой пояс, расписание. Затем вы можете получать заказы по команде /go\n\n@mrfreelance_chat - по всем другим вопросам.'
+  )
+})
 
 bot.use(require('./composers/start.composer'))
+bot.use(require('./composers/admin.composer'))
 bot.use(require('./composers/posting.composer'))
-bot.use(require('./composers/time.composer'))
-bot.use(require('./composers/categories.composer'))
-
+bot.use(require('./composers/settings.composer'))
 
 bot.launch();
 

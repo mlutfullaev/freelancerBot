@@ -18,6 +18,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  admin: {
+    type: Boolean,
+  },
   categories: {
     type: Array,
     default: []
@@ -25,6 +28,10 @@ const UserSchema = new mongoose.Schema({
   going: {
     type: Boolean,
     default: false,
+  },
+  weekdays: {
+    type: Array,
+    default: [1, 2, 3, 4, 5, 6, 7],
   },
   createdAt: {
     type: Date,

@@ -120,4 +120,14 @@ module.exports.categories = [
   },
 ]
 
+module.exports.weekdays = [
+  'Пн',
+  'Вт',
+  'Ср',
+  'Чт',
+  'Пт',
+  'Сб',
+  'Вс',
+]
+
 // module.exports.itCategoriesId = [38, 37, 79, 80, 41, 39, 255]

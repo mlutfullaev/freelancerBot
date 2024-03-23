@@ -1,22 +1,32 @@
 const UserController = require("../controller/user.controller");
-const ProjectController = require("../controller/project.controller");
 const moment = require('moment-timezone');
 const axios = require("axios");
 const {headers} = require("./data");
 const postingText = require("./postingText");
+const fs = require('fs');
+const path = require("path");
+const infoPath = path.resolve(__dirname, '../', 'info.json')
 
 const scrapping = async () => {
-  const id = Number(await ProjectController.getId())
-  console.log(`saved id: ${id}`)
+  const file = JSON.parse(fs.readFileSync(infoPath, "utf8"))
+  const id = file.projectId || 0
   let gettingOld = false;
   let works = [];
 
+  console.log(`saved id: ${id}`)
+
   await axios.post(`https://kwork.ru/projects?c=all`, {}, headers)
     .then(res => {
-      console.log('first project', res.data.data.wants[0].id)
-      ProjectController.updateId(res.data.data.wants[0].id)
-      res.data.data.wants.forEach((work, i) => {
+      const wants = res.data.data.wants
+      const firstId = wants[0].id
+
+      console.log('first project', firstId)
+
+      fs.writeFileSync(infoPath, JSON.stringify({...file, projectId: firstId}))
+
+      wants.forEach(work => {
         if (gettingOld) return;
+
         if (work.id <= id) {
           console.log(`stopped at ${work.id}`);
           gettingOld = true;
@@ -32,9 +42,11 @@ const scrapping = async () => {
   return works
 }
 
-function isReady(schedule, timezoneOffset) {
+function isReady({schedule, timezoneOffset, weekdays}) {
   // Текущее время в UTC
   const nowUtc = moment.utc();
+
+  if (!weekdays.includes(nowUtc.day())) return false
 
   // Преобразование UTC времени в локальное время пользователя
   const userLocalTime = nowUtc.clone().add(timezoneOffset, 'hours');
@@ -63,7 +75,7 @@ const posting = async (bot) => {
   try {
     let users = await UserController.getReadyUsers()
     if (!users.length) return
-    users = users.filter(user => isReady(user.schedule, user.timezone))
+    users = users.filter(user => isReady(user))
     if (!users.length) return
 
     const projects = await scrapping()
@@ -102,48 +114,56 @@ function isReadyTest() {
   const isReadyTests = [
     {
       timezone: 0,
+      weekdays: [1, 2, 3, 4, 5, 7],
       schedule: '8:00 - 12:00',
-      expected: true
+      expected: false
     },
     {
       timezone: 0,
+      weekdays: [1, 2, 3, 4, 5, 6, 7],
       schedule: '11:00 - 23:00',
       expected: false
     },
     {
       timezone: -12,
+      weekdays: [1, 2, 3, 4, 5, 6, 7],
       schedule: '8:00 - 12:00',
       expected: false
     },
     {
       timezone: -5,
       schedule: '15:00 - 23:00',
+      weekdays: [1, 2, 3, 4, 5, 6, 7],
       expected: true
     },
     {
       timezone: 5,
       schedule: '08:00 - 23:00',
+      weekdays: [1, 2, 3, 4, 5, 6, 7],
       expected: true
     },
     {
       timezone: 0,
       schedule: '4:00 - 23:00',
+      weekdays: [1, 2, 3, 4, 5, 6, 7],
       expected: false
     },
     {
       timezone: 8,
       schedule: '11:00 - 12:00',
+      weekdays: [1, 2, 3, 4, 5, 6, 7],
       expected: true
     },
     {
       timezone: 12,
       schedule: '19:00 - 23:30',
+      weekdays: [1, 2, 3, 4, 5, 6, 7],
       expected: false
     },
   ]
 
   isReadyTests.forEach((test, i) => {
-    console.log(`result: ${isReady(test.schedule, test.timezone)}, expected: ${test.expected}, index: ${i}`)
+    console.log(`result: ${isReady(test)}, expected: ${test.expected}, index: ${i}`)
   })
 }
 
