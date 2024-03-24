@@ -20,6 +20,7 @@ class UserController {
   }
   getReadyUsers = async () => {
     try {
+
       return await User.find({going: true})
     } catch (err) {
       console.error('Ошибка при получении пользователей', err.message);

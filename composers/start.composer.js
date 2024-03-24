@@ -16,7 +16,7 @@ const buttons = (user) => {
       keyboard.push([Markup.button.callback(`Остановить отправку`, 'stop')])
     }
   }
-  keyboard.push([Markup.button.callback(`Готово`, 'delete_msg')])
+  keyboard.push([Markup.button.callback(`Закрыть`, 'delete_msg')])
   return keyboard
 }
 composer.start(async (ctx) => {
