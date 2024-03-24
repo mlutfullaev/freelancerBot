@@ -32,11 +32,12 @@ composer.command('send_msg', async (ctx) => {
     const users = await UserController.getAll()
     const file = JSON.parse(fs.readFileSync(infoPath, "utf8"))
 
-    if (file.message) {
-      users.forEach((user) => {
-        ctx.telegram.sendMessage(user.id, file.message)
-      })
+    if (!file.message) {
+      return ctx.reply('Нету сообщении!')
     }
+    users.forEach((user) => {
+      ctx.telegram.sendMessage(user.id, file.message)
+    })
 
     fs.writeFileSync(infoPath, JSON.stringify({...file, message: ''}))
   } catch (e) {
