@@ -75,12 +75,10 @@ function isReady({schedule, timezoneOffset, weekdays}) {
 
 const posting = async (bot) => {
   try {
-    console.log(1)
     let users = await UserController.getReadyUsers()
     if (!users.length) return
     users = users.filter(user => isReady(user))
     if (!users.length) return
-    console.log(2)
 
     const projects = await scrapping()
     if (!projects.length) return
