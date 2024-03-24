@@ -42,7 +42,7 @@ const scrapping = async () => {
   return works
 }
 
-function isReady({schedule, timezoneOffset, weekdays}) {
+function isReady({schedule, timezone, weekdays}) {
   // Текущее время в UTC
   const nowUtc = moment.utc();
 
@@ -51,7 +51,7 @@ function isReady({schedule, timezoneOffset, weekdays}) {
   if (!weekdays.includes(day)) return false
 
   // Преобразование UTC времени в локальное время пользователя
-  const userLocalTime = nowUtc.clone().add(timezoneOffset, 'hours');
+  const userLocalTime = nowUtc.clone().add(timezone, 'hours');
 
   // Получаем часы и минуты в локальном времени пользователя
   const userLocalTimeHours = userLocalTime.hour();
@@ -77,8 +77,10 @@ const posting = async (bot) => {
   try {
     let users = await UserController.getReadyUsers()
     if (!users.length) return
+    console.log('all users')
     users = users.filter(user => isReady(user))
     if (!users.length) return
+    console.log('ready users')
 
     const projects = await scrapping()
     if (!projects.length) return

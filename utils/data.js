@@ -81,7 +81,7 @@ module.exports.categories = [
     ]
   },
   {
-    name: 'socials',
+    name: 'ads',
     value: 'Соцсети и реклама',
     categories: [
       "E-mail маркетинг и рассылки",
