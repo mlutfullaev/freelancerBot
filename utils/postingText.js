@@ -13,7 +13,7 @@ const posting = (work) => {
   }
   if (work.dateCreate) {
     let date = new Date(work.dateCreate)
-    date = `${date.getHours()}:${date.getMinutes()} - ${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`
+    date = `${date.getHours()}:${date.getMinutes()} - ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`
     text += `\n<b>Дата выхода</b>: ${date}`
   }
   // if (work.categoryName) {

@@ -37,6 +37,7 @@ composer.command('send_msg', async (ctx) => {
     }
     users.forEach((user) => {
       ctx.telegram.sendMessage(user.id, file.message)
+        .catch(err => console.log(err))
     })
 
     fs.writeFileSync(infoPath, JSON.stringify({...file, message: ''}))
