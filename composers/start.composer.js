@@ -4,8 +4,8 @@ const composer = new Composer()
 
 const buttons = (user) => {
   const keyboard = [
-    [Markup.button.callback(`Категории ${user.categories.length ? '✅' : ''}`, 'categories')],
-    [Markup.button.callback(`Время ${Number.isInteger(user.timezone) && user.schedule ? '✅' : ''}`, 'time')],
+    [Markup.button.callback(`Категории (${user.categories.length})`, 'categories')],
+    [Markup.button.callback('Время', 'time')],
     [Markup.button.callback(`Дни недели (${user.weekdays.length ? `${user.weekdays.length}дн.` : 'Пусто'})`, 'weekdays')],
     [Markup.button.callback(`Помощь`, 'help')],
   ]

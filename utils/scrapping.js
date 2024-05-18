@@ -77,10 +77,10 @@ const posting = async (bot) => {
   try {
     let users = await UserController.getReadyUsers()
     if (!users.length) return
-    console.log('all users')
+    console.log(`all users ${users.length}`)
     users = users.filter(user => isReady(user))
     if (!users.length) return
-    console.log('ready users')
+    console.log(`ready users ${users.length}`)
 
     const projects = await scrapping()
     if (!projects.length) return
